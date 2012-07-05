@@ -1,16 +1,16 @@
 (function( $ ){
-  
+
   "use strict";
-  
+
   var Uploader = function(el, options) {
     this.$el = $(el);
     this.options = $.extend({}, $.fn.uploader.defaults, options);
   };
-  
+
   Uploader.prototype = {
-    
+
     constructor: Uploader,
-    
+
     applyTheme: function() {
       if (!this.$overlay) {
         this.$el.width(0).height(0).css({
@@ -19,7 +19,7 @@
           'margin': 0,
           'padding': 0
         });
-        
+
         this.$overlay = $('<div class="input-prepend"/>').insertAfter(this.$el);
 
         this.$button = $('<button class="btn"></button>').appendTo(this.$overlay);
@@ -30,26 +30,27 @@
         //this.$overlay.append('<button class="btn"><i class="icon-upload"></i></button>');
         this.$input = $('<input type="text"/>').appendTo(this.$overlay);
         this.$input.val(this.options.inputText);
-        
+
         this.$overlay.on('click', $.proxy(this._on_click, this));
         this.$el.on('change', $.proxy(this._on_change, this));
-        
+
         this.$el.trigger('themed');
       }
       this.$overlay.offset(this.$el.offset());
     },
-    
+
     _on_click: function(e) {
+      e.preventDefault();
       this.$el.click();
     },
-    
+
     _on_change: function(e) {
       var filename = this.$el.val().replace(/^(.*)(\\|\/)/g, '');
       this.$overlay.find('input').val(filename);
     }
-    
+
   };
-  
+
   $.fn.uploader = function(option) {
     return this.each(function(){
       var $this = $(this)
@@ -59,15 +60,15 @@
       data.applyTheme();
     });
   };
-  
+
   $.fn.uploader.defaults = {
     inputText: 'Choose a file...',
     buttonText: '',
     icon: 'file'
   };
-  
+
   $.fn.uploader.Constructor = Uploader;
-  
+
   $(function() {
     $(':file').each(function(i, el) {
       var $this = $(this), options = {};
